@@ -1,0 +1,30 @@
+---
+- name: download redis source
+  uri:
+    url: "https://github.com/antirez/redis/archive/{{ redis_4_version }}.tar.gz"
+    dest: /tmp/source_redis.tar.gz
+
+- name: unarchive Redis source
+  unarchive:
+    src: /tmp/source_redis.tar.gz
+    dest: /tmp
+    remote_src: yes
+
+- name: make dist clean
+  make:
+    chdir: "/tmp/redis-{{ redis_4_version }}"
+    target: distclean
+
+- name: make
+  make:
+    chdir: "/tmp/redis-{{ redis_4_version }}"
+
+- name: make test
+  make:
+    chdir: "/tmp/redis-{{ redis_4_version }}"
+    target: test
+
+- name: make install
+  make:
+    chdir: "/tmp/redis-{{ redis_4_version }}"
+    target: install

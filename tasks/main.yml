@@ -1,0 +1,23 @@
+---
+- name: install dependency for install Redis 4
+  yum:
+    name: tcl
+
+- name: check redis-server for idempotency
+  stat:
+    path: /usr/local/bin/redis-server
+  register: stat_redis_server
+
+- include_tasks: make_redis.yml
+  when: not stat_redis_server.stat.exists
+
+- name: install server
+  shell: "REDIS_EXECUTABLE=/usr/local/bin/redis-server ./utils/install_server.sh"
+  args:
+    chdir: "/tmp/redis-{{ redis_4_version }}"
+
+- name: set start Redis automaticaly
+  service:
+    name: redis_6379
+    state: started
+    enabled: yes
