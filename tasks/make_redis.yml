@@ -3,6 +3,7 @@
   uri:
     url: "https://github.com/antirez/redis/archive/{{ redis_4_version }}.tar.gz"
     dest: /tmp/source_redis.tar.gz
+    creates: /tmp/source_redis.tar.gz
 
 - name: unarchive Redis source
   unarchive:
